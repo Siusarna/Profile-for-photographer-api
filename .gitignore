@@ -1,0 +1,6 @@
+.idea/
+node_modules/
+build/
+config/default.ts
+config/database.ts
+.DS_Store
