@@ -1,23 +1,22 @@
 import * as Koa from 'koa';
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import * as config from 'config';
-import { getRepository } from 'typeorm';
-import { User } from '../admins/entities/user.entity';
-const { createAndUpdateTokens } = require('../utils/jwtToken');
-const { getUserById } = require('../accounts/queries');
-const { parseTimeFromConfig } = require('../utils/parseConfig');
+import Queries from '../admins/admins.query';
+
+import { createAndUpdateTokens } from '../helper/jwtToken';
+import ParseConfig from '../helper/parseConfig';
 
 const setTokens = (ctx, tokens) => {
   const { accessToken, refreshToken } = tokens;
   ctx.cookies.set(
     'accessToken',
     accessToken,
-    { maxAge: parseTimeFromConfig(config.get('jwt.tokens.access.expiresIn')) },
+    { maxAge: ParseConfig.parseTime(config.get('jwt.tokens.access.expiresIn')) },
     );
   ctx.cookies.set(
     'refreshToken',
     refreshToken,
-    { maxAge: parseTimeFromConfig(config.get('jwt.tokens.refresh.expiresIn')) },
+    { maxAge: ParseConfig.parseTime(config.get('jwt.tokens.refresh.expiresIn')) },
     );
 };
 
@@ -59,8 +58,7 @@ export const checkAuth = () => {
     if (payload.type !== 'access') {
       return ctx.throw(400, 'Invalid token, please log in again');
     }
-    const [user] = await getUserById(payload.userId);
-    ctx.state.user = user;
+    ctx.state.user = await Queries.getUserById(payload.userId);
     return await next();
   };
 };

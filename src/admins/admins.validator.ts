@@ -68,11 +68,34 @@ export class AdminValidator {
       type: 'json',
       body: {
         name: joi.string().required(),
+        categoryId: joi.string().required(),
       },
       output: {
         200: {
           body: {
-            id: joi.string(),
+            id: joi.number(),
+          },
+        },
+      },
+    },
+  };
+  static createCategory: Router.Config = {
+    meta: {
+      swagger: {
+        summary: 'Create category',
+        description: 'Create category for album',
+        tags: ['admin'],
+      },
+    },
+    validate: {
+      type: 'json',
+      body: {
+        name: joi.string().required(),
+      },
+      output: {
+        200: {
+          body: {
+            success: joi.boolean(),
           },
         },
       },

@@ -22,5 +22,11 @@ adminRouter.post(
   checkAuth(),
   AdminController.createAlbum,
 );
+adminRouter.post(
+  '/admin/category',
+  AdminValidator.createCategory,
+  checkAuth(),
+  AdminController.createCategory,
+);
 
 export default adminRouter;

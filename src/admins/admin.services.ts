@@ -34,4 +34,11 @@ export default class Services {
       name: album.name,
     };
   }
+
+  static async createCategory({ name }) {
+    await Queries.createCategory(name);
+    return {
+      success: true,
+    };
+  }
 }

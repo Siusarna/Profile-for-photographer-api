@@ -37,4 +37,13 @@ export class AdminController {
       return ctx.throw(e);
     }
   }
+
+  static async createCategory(ctx: Context) {
+    try {
+      ctx.body = await Services.createCategory(ctx.request.body);
+      return ctx;
+    } catch (e) {
+      return ctx.throw(e);
+    }
+  }
 }
