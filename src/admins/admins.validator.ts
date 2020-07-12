@@ -1,4 +1,6 @@
 import * as Router from 'koa-joi-router';
+import { validateFileTypeAndSize } from '../helper/photoValidate';
+import { Context } from 'koa';
 
 const PASSWORD_PATTERN = new RegExp('^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})', 'i');
 
@@ -91,6 +93,33 @@ export class AdminValidator {
       type: 'json',
       body: {
         name: joi.string().required(),
+      },
+      output: {
+        200: {
+          body: {
+            success: joi.boolean(),
+          },
+        },
+      },
+    },
+  };
+  static uploadPhotos: Router.Config = {
+    meta: {
+      swagger: {
+        summary: 'Upload photo',
+        description: 'Upload photo in the album',
+        tags: ['admin'],
+      },
+    },
+    pre: async (ctx: Context, next: () => Promise<any>) => {
+      await validateFileTypeAndSize(ctx, 'photos');
+      await next();
+    },
+    validate: {
+      type: 'json',
+      body: {
+        albumId: joi.string().required(),
+        photos: joi.array().items(joi.string()).required(),
       },
       output: {
         200: {

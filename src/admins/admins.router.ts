@@ -28,5 +28,11 @@ adminRouter.post(
   checkAuth(),
   AdminController.createCategory,
 );
+adminRouter.post(
+  '/admin/photo',
+  AdminValidator.uploadPhotos,
+  checkAuth(),
+  AdminController.uploadPhotos,
+);
 
 export default adminRouter;

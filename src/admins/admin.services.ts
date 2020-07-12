@@ -1,5 +1,6 @@
 import Queries from './admins.query';
 import { createAndUpdateTokens } from '../helper/jwtToken';
+import AWSS3 from '../helper/S3';
 
 export default class Services {
   static async signIn({ email, password }) {
@@ -37,6 +38,18 @@ export default class Services {
 
   static async createCategory({ name }) {
     await Queries.createCategory(name);
+    return {
+      success: true,
+    };
+  }
+
+  static async uploadPhotos({ albumId, photos }) {
+    const album = await Queries.getAlbumById(albumId);
+    if (!album) throw new Error('Такого альбома не існує');
+    await Promise.all(photos.map(async (photo) => {
+      const photoUrl = await AWSS3.uploadS3(photo, 'photos', `album_${album.name}`);
+      await Queries.createPhoto(photoUrl, album);
+    }));
     return {
       success: true,
     };

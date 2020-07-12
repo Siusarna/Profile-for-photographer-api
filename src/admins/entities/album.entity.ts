@@ -6,11 +6,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   ManyToOne,
-  JoinColumn,
+  JoinColumn, OneToMany,
 } from 'typeorm';
 
 import { IsDefined } from 'class-validator';
 import { Category } from './category.entity';
+import { Photo } from './photo.entity';
 
 @Entity()
 export class Album extends BaseEntity {
@@ -24,6 +25,9 @@ export class Album extends BaseEntity {
   @ManyToOne(type => Category, category => category.albums, { onDelete: 'CASCADE' })
   @JoinColumn()
   category: Category;
+
+  @OneToMany(type => Photo, photo => photo.album)
+  photos: Photo[];
 
   @CreateDateColumn()
   createdAt: string;

@@ -46,4 +46,13 @@ export class AdminController {
       return ctx.throw(e);
     }
   }
+
+  static async uploadPhotos(ctx: Context) {
+    try {
+      ctx.body = await Services.uploadPhotos(ctx.request.body);
+      return ctx;
+    } catch (e) {
+      return ctx.throw(e);
+    }
+  }
 }

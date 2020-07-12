@@ -2,6 +2,7 @@ import { getRepository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { Album } from './entities/album.entity';
 import { Category } from './entities/category.entity';
+import { Photo } from './entities/photo.entity';
 
 export default class Queries {
   static getUserById(id: number) {
@@ -67,4 +68,25 @@ export default class Queries {
       throw new Error(e);
     }
   }
+
+  static getAlbumById(id) {
+    return getRepository(Album)
+      .createQueryBuilder('album')
+      .where('album.id = :id', { id })
+      .getOne();
+  }
+
+  static async createPhoto(url, album) {
+    const photo = await Photo.create({
+      url,
+      album,
+    });
+    try {
+      await photo.save();
+      return photo;
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
 }
