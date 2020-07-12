@@ -7,8 +7,8 @@ const { parseTimeFromConfig } = require('../utils/parseConfig');
 
 const setTokens = (ctx, tokens) => {
   const { accessToken, refreshToken } = tokens;
-  ctx.cookies.set('accessToken', accessToken, { maxAge: parseTimeFromConfig(config.jwt.tokens.access.expiresIn) });
-  ctx.cookies.set('refreshToken', refreshToken, { maxAge: parseTimeFromConfig(config.jwt.tokens.refresh.expiresIn) });
+  ctx.cookies.set('accessToken', accessToken, { maxAge: parseTimeFromConfig(config.get('jwt.tokens.access.expiresIn')) });
+  ctx.cookies.set('refreshToken', refreshToken, { maxAge: parseTimeFromConfig(config.get('jwt.tokens.refresh.expiresIn')) });
 };
 
 const processingRefreshToken = async (refreshToken: string, ctx: Koa.Context, next: () => Promise<any>) => {
@@ -17,7 +17,7 @@ const processingRefreshToken = async (refreshToken: string, ctx: Koa.Context, ne
   }
   let payload;
   try {
-    payload = jwt.verify(refreshToken, config.jwt.secret);
+    payload = jwt.verify(refreshToken, config.get('jwt.secret'));
     if (payload.type !== 'refresh') {
       return ctx.throw(400, 'Invalid token, please log in again');
     }
@@ -41,7 +41,7 @@ export default async (ctx: Koa.Context, next: () => Promise<any>) => {
   }
   let payload;
   try {
-    payload = jwt.verify(accessToken, config.jwt.secret);
+    payload = jwt.verify(accessToken, config.get('jwt.secret'));
   } catch (e) {
     return processingRefreshToken(refreshToken, ctx, next);
   }
