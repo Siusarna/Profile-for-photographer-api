@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "tsnd --respawn --no-notify --transpileOnly src/app.ts",
-    "lint": "tslint --config tslint.json --format stylish --project tsconfig.json",
+    "lint": "tslint --config tslint.json --format stylish --project tsconfig.json --fix",
     "build": "tsc",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config ./config/database.ts"
   },

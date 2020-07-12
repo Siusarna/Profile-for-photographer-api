@@ -7,8 +7,16 @@ const { parseTimeFromConfig } = require('../utils/parseConfig');
 
 const setTokens = (ctx, tokens) => {
   const { accessToken, refreshToken } = tokens;
-  ctx.cookies.set('accessToken', accessToken, { maxAge: parseTimeFromConfig(config.get('jwt.tokens.access.expiresIn')) });
-  ctx.cookies.set('refreshToken', refreshToken, { maxAge: parseTimeFromConfig(config.get('jwt.tokens.refresh.expiresIn')) });
+  ctx.cookies.set(
+    'accessToken',
+    accessToken,
+    { maxAge: parseTimeFromConfig(config.get('jwt.tokens.access.expiresIn')) },
+    );
+  ctx.cookies.set(
+    'refreshToken',
+    refreshToken,
+    { maxAge: parseTimeFromConfig(config.get('jwt.tokens.refresh.expiresIn')) },
+    );
 };
 
 const processingRefreshToken = async (refreshToken: string, ctx: Koa.Context, next: () => Promise<any>) => {
@@ -52,4 +60,3 @@ export default async (ctx: Koa.Context, next: () => Promise<any>) => {
   ctx.state.user = user;
   return next();
 };
-

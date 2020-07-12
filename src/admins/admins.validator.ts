@@ -23,21 +23,34 @@ export class AdminValidator {
       output: {
         200: {
           body: {
-            tokens: joi.object({
-              accessToken: joi.string(),
-              accessExpiresIn: joi.number(),
-              refreshToken: joi.string(),
-              refreshExpiresIn: joi.number(),
-            }),
-            user: {
-              id: joi.number(),
-              firstName: joi.string(),
-              lastName: joi.string(),
-              username: joi.string(),
-              photo: joi.string(),
-              inOrganization: joi.bool(),
-              RTMP: joi.string().allow(null),
-            },
+            firstName: joi.string(),
+            lastName: joi.string(),
+          },
+        },
+      },
+    },
+  };
+  static signUp: Router.Config = {
+    meta: {
+      swagger: {
+        summary: 'Admin sign up',
+        description: 'Sign up admin',
+        tags: ['admin'],
+      },
+    },
+    validate: {
+      type: 'json',
+      body: {
+        email: joi.string().required(),
+        password: joiPassword,
+        firstName: joi.string().required(),
+        lastName: joi.string().required(),
+      },
+      output: {
+        200: {
+          body: {
+            firstName: joi.string(),
+            lastName: joi.string(),
           },
         },
       },

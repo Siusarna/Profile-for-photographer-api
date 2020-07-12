@@ -3,7 +3,6 @@ import * as config from 'config';
 import { v4 as uuidv4 } from 'uuid';
 import { getConnection, getRepository } from 'typeorm';
 import { Token } from '../admins/entities/token.entity';
-import { User } from '../admins/entities/user.entity';
 
 const generateAccessToken = (userId) => {
   const payload = {
@@ -17,24 +16,24 @@ const generateAccessToken = (userId) => {
 const generateRefreshToken = (userId) => {
   const tokenId = uuidv4();
   const payload = {
-    type: config.get('jwt.tokens.refresh.type'),
     tokenId,
     userId,
+    type: config.get('jwt.tokens.refresh.type'),
   };
   const options = { expiresIn: config.get('jwt.tokens.refresh.expiresIn') };
   return {
-    refreshToken: jwt.sign(payload, config.get('jwt.secret'), options),
     tokenId,
+    refreshToken: jwt.sign(payload, config.get('jwt.secret'), options),
   };
 };
 
-const createAndUpdateTokens = async (userId) => {
+const createAndUpdateTokens = async (user) => {
   try {
-    const accessToken = generateAccessToken(userId);
-    const { tokenId, refreshToken } = generateRefreshToken(userId);
+    const accessToken = generateAccessToken(user.id);
+    const { tokenId, refreshToken } = generateRefreshToken(user.id);
     const tokenFromDb = await getRepository(Token)
       .createQueryBuilder('token')
-      .where('token.userId = :userId', {userId})
+      .where('token.user = :user', { user })
       .getOne();
     if (tokenFromDb) {
       await getConnection()
@@ -43,16 +42,12 @@ const createAndUpdateTokens = async (userId) => {
         .set({
           tokenId,
         })
-        .where('userId = :userId', { userId })
+        .where('user = :user', { user })
         .execute();
     } else {
-      const user = await getRepository(User)
-        .createQueryBuilder('user')
-        .where('user.id = :userId', {userId})
-        .getOne();
       await Token.create({
         tokenId,
-        user
+        user,
       }).save();
     }
     return {
@@ -64,6 +59,6 @@ const createAndUpdateTokens = async (userId) => {
   }
 };
 
-module.exports = {
+export {
   createAndUpdateTokens,
 };

@@ -9,8 +9,12 @@ const adminRouter = Router();
 adminRouter.post(
   '/admin/accounts/sign-in',
   AdminValidator.signIn,
-  checkAuth,
   AdminController.signIn,
+);
+adminRouter.post(
+  '/admin/accounts/sign-up',
+  AdminValidator.signUp,
+  AdminController.signUp,
 );
 
 export default adminRouter;
