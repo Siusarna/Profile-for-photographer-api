@@ -5,15 +5,14 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  ManyToOne,
-  JoinColumn,
+  OneToMany,
 } from 'typeorm';
 
 import { IsDefined } from 'class-validator';
-import { Category } from './category.entity';
+import { Album } from './album.entity';
 
 @Entity()
-export class Album extends BaseEntity {
+export class Category extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -21,9 +20,8 @@ export class Album extends BaseEntity {
   @IsDefined()
   name: string;
 
-  @ManyToOne(type => Category, category => category.albums, { onDelete: 'CASCADE' })
-  @JoinColumn()
-  category: Category;
+  @OneToMany(type => Album, album => album.category)
+  albums: Album[];
 
   @CreateDateColumn()
   createdAt: string;
