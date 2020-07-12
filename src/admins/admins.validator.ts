@@ -56,4 +56,26 @@ export class AdminValidator {
       },
     },
   };
+  static createAlbum: Router.Config = {
+    meta: {
+      swagger: {
+        summary: 'Create album',
+        description: 'Create album for photo',
+        tags: ['admin'],
+      },
+    },
+    validate: {
+      type: 'json',
+      body: {
+        name: joi.string().required(),
+      },
+      output: {
+        200: {
+          body: {
+            id: joi.string(),
+          },
+        },
+      },
+    },
+  };
 }

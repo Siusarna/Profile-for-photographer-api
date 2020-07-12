@@ -28,4 +28,13 @@ export class AdminController {
       return ctx.throw(400, error);
     }
   }
+
+  static async createAlbum(ctx: Context) {
+    try {
+      ctx.body = await Services.createAlbum(ctx.request.body);
+      return ctx;
+    } catch (e) {
+      return ctx.throw(e);
+    }
+  }
 }
