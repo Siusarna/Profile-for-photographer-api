@@ -1,5 +1,6 @@
-const jwt = require('jsonwebtoken');
-const config = require('config');
+import * as Koa from 'koa';
+import jwt from 'jsonwebtoken';
+import * as config from 'config';
 const { createAndUpdateTokens } = require('../utils/jwtToken');
 const { getUserById } = require('../accounts/queries');
 const { parseTimeFromConfig } = require('../utils/parseConfig');
@@ -10,7 +11,7 @@ const setTokens = (ctx, tokens) => {
   ctx.cookies.set('refreshToken', refreshToken, { maxAge: parseTimeFromConfig(config.jwt.tokens.refresh.expiresIn) });
 };
 
-const processingRefreshToken = async (refreshToken, ctx, next) => {
+const processingRefreshToken = async (refreshToken: string, ctx: Koa.Context, next: () => Promise<any>) => {
   if (!refreshToken) {
     return ctx.throw(401, 'Tokens expired, please log in again');
   }
@@ -29,12 +30,12 @@ const processingRefreshToken = async (refreshToken, ctx, next) => {
   return next();
 };
 
-export default async (ctx, next) => {
+export default async (ctx: Koa.Context, next: () => Promise<any>) => {
   if (!ctx.cookies) {
     return ctx.throw(400, 'Unauthorized');
   }
-  const accessToken = ctx.cookies.get('accessToken') || ctx.request.headers.accesstoken;
-  const refreshToken = ctx.cookies.get('refreshToken') || ctx.request.headers.refreshtoken;
+  const accessToken: string = ctx.cookies.get('accessToken') || ctx.request.headers.accesstoken;
+  const refreshToken: string = ctx.cookies.get('refreshToken') || ctx.request.headers.refreshtoken;
   if (!accessToken) {
     return processingRefreshToken(refreshToken, ctx, next);
   }
