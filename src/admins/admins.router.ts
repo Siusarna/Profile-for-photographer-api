@@ -22,6 +22,33 @@ adminRouter.post(
   checkAuth(),
   AdminController.createAlbum,
 );
+adminRouter.delete(
+  '/admin/album/:albumId',
+  AdminValidator.deleteAlbum,
+  checkAuth(),
+  AdminController.deleteAlbum,
+);
+adminRouter.put(
+  '/admin/album',
+  AdminValidator.updateAlbum,
+  checkAuth(),
+  AdminController.updateAlbum,
+);
+adminRouter.get(
+  '/admin/album',
+  AdminValidator.getAlbums,
+  AdminController.getAlbums,
+);
+adminRouter.get(
+  '/admin/album/:categoryId',
+  AdminValidator.getAlbumsByCategory,
+  AdminController.getAlbumsByCategory,
+);
+adminRouter.get(
+  '/admin/album/:categoryId/:albumId',
+  AdminValidator.getAlbumById,
+  AdminController.getAlbumById,
+);
 adminRouter.post(
   '/admin/category',
   AdminValidator.createCategory,

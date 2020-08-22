@@ -7,7 +7,8 @@ export class AdminController {
 
   static async signIn(ctx: Context) {
     try {
-      const { accessToken, refreshToken, ...rest } = await Services.signIn(ctx.request.body);
+      const { email, password } = ctx.request.body;
+      const { accessToken, refreshToken, ...rest } = await Services.signIn(email, password);
       ctx.cookies.set('accessToken', accessToken, { maxAge: ParseConfig.parseTime(config.get('jwt.tokens.access.expiresIn')) });
       ctx.cookies.set('refreshToken', refreshToken, { maxAge: ParseConfig.parseTime(config.get('jwt.tokens.refresh.expiresIn')) });
       ctx.body = rest;
@@ -19,7 +20,8 @@ export class AdminController {
 
   static async signUp(ctx: Context) {
     try {
-      const { accessToken, refreshToken, ...rest } = await Services.signUp(ctx.request.body);
+      const { email, firstName, lastName, password } = ctx.request.body;
+      const { accessToken, refreshToken, ...rest } = await Services.signUp(email, firstName, lastName, password);
       ctx.cookies.set('accessToken', accessToken, { maxAge: ParseConfig.parseTime(config.get('jwt.tokens.access.expiresIn')) });
       ctx.cookies.set('refreshToken', refreshToken, { maxAge: ParseConfig.parseTime(config.get('jwt.tokens.refresh.expiresIn')) });
       ctx.body = rest;
@@ -31,7 +33,8 @@ export class AdminController {
 
   static async createAlbum(ctx: Context) {
     try {
-      ctx.body = await Services.createAlbum(ctx.request.body);
+      const { name, categoryId } = ctx.request.body;
+      ctx.body = await Services.createAlbum(name, categoryId);
       return ctx;
     } catch (e) {
       return ctx.throw(e);
@@ -40,7 +43,8 @@ export class AdminController {
 
   static async createCategory(ctx: Context) {
     try {
-      ctx.body = await Services.createCategory(ctx.request.body);
+      const { name } = ctx.request.body;
+      ctx.body = await Services.createCategory(name);
       return ctx;
     } catch (e) {
       return ctx.throw(e);
@@ -49,10 +53,60 @@ export class AdminController {
 
   static async uploadPhotos(ctx: Context) {
     try {
-      ctx.body = await Services.uploadPhotos(ctx.request.body);
+      const { albumId, photos } = ctx.request.body;
+      ctx.body = await Services.uploadPhotos(albumId, photos);
       return ctx;
     } catch (e) {
       return ctx.throw(e);
     }
   }
+
+  static async deleteAlbum(ctx: Context) {
+    try {
+      const { albumId } = ctx.request.params;
+      ctx.body = await Services.deleteAlbum(albumId);
+      return ctx;
+    } catch (e) {
+      return ctx.throw(e);
+    }
+  }
+
+  static async updateAlbum(ctx: Context) {
+    try {
+      const { albumId, name } = ctx.request.body;
+      ctx.body = await Services.updateAlbum(albumId, name);
+      return ctx;
+    } catch (e) {
+      return ctx.throw(e);
+    }
+  }
+
+  static async getAlbums(ctx: Context) {
+    try {
+      ctx.body = await Services.getAlbums();
+      return ctx;
+    } catch (e) {
+      return ctx.throw(e);
+    }
+  }
+
+  static async getAlbumsByCategory(ctx: Context) {
+    try {
+      const { categoryId } = ctx.request.params;
+      ctx.body = await Services.getAlbumsByCategory(categoryId);
+      return ctx;
+    } catch (e) {
+      return ctx.throw(e);
+    }
+  }
+  static async getAlbumById(ctx: Context) {
+    try {
+      const { albumId } = ctx.request.params;
+      ctx.body = await Services.getAlbumById(albumId);
+      return ctx;
+    } catch (e) {
+      return ctx.throw(e);
+    }
+  }
+
 }

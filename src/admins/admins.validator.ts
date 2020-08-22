@@ -70,12 +70,12 @@ export class AdminValidator {
       type: 'json',
       body: {
         name: joi.string().required(),
-        categoryId: joi.string().required(),
+        categoryId: joi.number().required(),
       },
       output: {
         200: {
           body: {
-            id: joi.number(),
+            success: joi.boolean().required(),
           },
         },
       },
@@ -118,13 +118,139 @@ export class AdminValidator {
     validate: {
       type: 'json',
       body: {
-        albumId: joi.string().required(),
+        albumId: joi.number().required(),
         photos: joi.array().items(joi.string()).required(),
       },
       output: {
         200: {
           body: {
             success: joi.boolean(),
+          },
+        },
+      },
+    },
+  };
+  static deleteAlbum: Router.Config = {
+    meta: {
+      swagger: {
+        summary: 'Delete album',
+        description: 'Delete album for photo',
+        tags: ['admin'],
+      },
+    },
+    validate: {
+      type: 'json',
+      params: {
+        albumId: joi.number().required(),
+      },
+      output: {
+        200: {
+          body: {
+            success: joi.boolean(),
+          },
+        },
+      },
+    },
+  };
+
+  static updateAlbum: Router.Config = {
+    meta: {
+      swagger: {
+        summary: 'Update album',
+        description: 'Update album for photo',
+        tags: ['admin'],
+      },
+    },
+    validate: {
+      type: 'json',
+      body: {
+        albumId: joi.number().required(),
+        name: joi.string().required(),
+      },
+      output: {
+        200: {
+          body: {
+            success: joi.boolean(),
+          },
+        },
+      },
+    },
+  };
+
+  static getAlbums: Router.Config = {
+    meta: {
+      swagger: {
+        summary: 'Get all albums',
+        description: 'Get all albums without photo',
+        tags: ['admin'],
+      },
+    },
+    validate: {
+      type: 'json',
+      body: {},
+      output: {
+        200: {
+          body: {
+            albums: joi.array().items({
+              name: joi.string().required(),
+              id: joi.number().required(),
+            }),
+          },
+        },
+      },
+    },
+  };
+
+  static getAlbumsByCategory: Router.Config = {
+    meta: {
+      swagger: {
+        summary: 'Get albums by category',
+        description: 'Get albums by category without photo',
+        tags: ['admin'],
+      },
+    },
+    validate: {
+      type: 'json',
+      body: {},
+      params: {
+        categoryId: joi.number().required(),
+      },
+      output: {
+        200: {
+          body: {
+            albums: joi.array().items({
+              name: joi.string().required(),
+              id: joi.number().required(),
+            }),
+          },
+        },
+      },
+    },
+  };
+
+  static getAlbumById: Router.Config = {
+    meta: {
+      swagger: {
+        summary: 'Get albums by id',
+        description: 'Get albums by id with photo',
+        tags: ['admin'],
+      },
+    },
+    validate: {
+      type: 'json',
+      body: {},
+      params: {
+        categoryId: joi.number().required(),
+        albumId: joi.number().required(),
+      },
+      output: {
+        200: {
+          body: {
+            name: joi.string().required(),
+            id: joi.number().required(),
+            photos: joi.array().items({
+              url: joi.string().required(),
+            }),
           },
         },
       },

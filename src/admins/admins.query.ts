@@ -19,13 +19,13 @@ export default class Queries {
       .getOne();
   }
 
-  static async createUser(body) {
+  static async createUser(firstName, lastName, email, password) {
     const user = await User.create({
-      firstName: body.firstName,
-      lastName: body.lastName,
-      email: body.email,
+      firstName,
+      lastName,
+      email,
     });
-    user.password = user.generatePasswordHash(body.password);
+    user.password = user.generatePasswordHash(password);
     try {
       await user.save();
       return user;
@@ -72,6 +72,7 @@ export default class Queries {
   static getAlbumById(id) {
     return getRepository(Album)
       .createQueryBuilder('album')
+      .select(['album.id', 'album.name'])
       .where('album.id = :id', { id })
       .getOne();
   }
@@ -87,6 +88,29 @@ export default class Queries {
     } catch (e) {
       throw new Error(e);
     }
+  }
+
+  static async getAllAlbums() {
+    return getRepository(Album)
+      .createQueryBuilder('album')
+      .select(['album.id', 'album.name'])
+      .getMany();
+  }
+
+  static async getAllAlbumsByCategory(categoryId) {
+    return getRepository(Album)
+      .createQueryBuilder('album')
+      .select(['album.id', 'album.name'])
+      .where('album.category = :categoryId', { categoryId })
+      .getMany();
+  }
+
+  static async getPhotosByAlbumId(albumId) {
+    return getRepository(Photo)
+      .createQueryBuilder('photo')
+      .select(['photo.url'])
+      .where('photo.album = :albumId', { albumId })
+      .getMany();
   }
 
 }

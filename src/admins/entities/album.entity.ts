@@ -26,7 +26,7 @@ export class Album extends BaseEntity {
   @JoinColumn()
   category: Category;
 
-  @OneToMany(type => Photo, photo => photo.album)
+  @OneToMany(type => Photo, photo => photo.album, { onDelete: 'CASCADE' })
   photos: Photo[];
 
   @CreateDateColumn()
