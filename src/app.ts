@@ -61,6 +61,7 @@ createConnection({ ...databaseConf })
       credentials: true,
     }));
     app.use(bodyParser({
+      parsedMethods: ['POST', 'PUT', 'PATCH', 'GET', 'HEAD', 'DELETE'],
       multipart: true,
       includeUnparsed: true,
     }));
