@@ -231,8 +231,8 @@ export class AdminValidator {
   static getAlbumById: Router.Config = {
     meta: {
       swagger: {
-        summary: 'Get albums by id',
-        description: 'Get albums by id with photo',
+        summary: 'Get album by id',
+        description: 'Get album by id with photo',
         tags: ['admin'],
       },
     },
@@ -250,7 +250,106 @@ export class AdminValidator {
             id: joi.number().required(),
             photos: joi.array().items({
               url: joi.string().required(),
+              id: joi.number().required(),
             }),
+          },
+        },
+      },
+    },
+  };
+
+  static deleteCategory: Router.Config = {
+    meta: {
+      swagger: {
+        summary: 'Delete category',
+        description: 'Delete category for album',
+        tags: ['admin'],
+      },
+    },
+    validate: {
+      type: 'json',
+      params: {
+        categoryId: joi.number().required(),
+      },
+      output: {
+        200: {
+          body: {
+            success: joi.boolean(),
+          },
+        },
+      },
+    },
+  };
+
+  static updateCategory: Router.Config = {
+    meta: {
+      swagger: {
+        summary: 'Update category',
+        description: 'Update category for album',
+        tags: ['admin'],
+      },
+    },
+    validate: {
+      type: 'json',
+      body: {
+        categoryId: joi.number().required(),
+        name: joi.string().required(),
+      },
+      output: {
+        200: {
+          body: {
+            success: joi.boolean(),
+          },
+        },
+      },
+    },
+  };
+
+  static getCategories: Router.Config = {
+    meta: {
+      swagger: {
+        summary: 'Get all categories',
+        description: 'Get all categories',
+        tags: ['admin'],
+      },
+    },
+    validate: {
+      type: 'json',
+      body: {},
+      output: {
+        200: {
+          body: {
+            categories: joi.array().items({
+              name: joi.string().required(),
+              id: joi.number().required(),
+            }),
+          },
+        },
+      },
+    },
+  };
+  static deletePhotos: Router.Config = {
+    meta: {
+      swagger: {
+        summary: 'Delete photos',
+        description: 'Delete photos',
+        tags: ['admin'],
+      },
+    },
+    validate: {
+      type: 'json',
+      params: {
+        albumId: joi.number().required(),
+      },
+      body: {
+        photos: joi.array().items({
+          id: joi.number().required(),
+        }),
+      },
+      output: {
+        200: {
+          body: {
+            success: joi.boolean(),
           },
         },
       },

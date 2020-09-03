@@ -35,17 +35,17 @@ adminRouter.put(
   AdminController.updateAlbum,
 );
 adminRouter.get(
-  '/admin/album',
+  '/album',
   AdminValidator.getAlbums,
   AdminController.getAlbums,
 );
 adminRouter.get(
-  '/admin/album/:categoryId',
+  '/album/:categoryId',
   AdminValidator.getAlbumsByCategory,
   AdminController.getAlbumsByCategory,
 );
 adminRouter.get(
-  '/admin/album/:categoryId/:albumId',
+  '/album/:categoryId/:albumId',
   AdminValidator.getAlbumById,
   AdminController.getAlbumById,
 );
@@ -55,11 +55,34 @@ adminRouter.post(
   checkAuth(),
   AdminController.createCategory,
 );
+adminRouter.delete(
+  '/admin/category/:categoryId',
+  AdminValidator.deleteCategory,
+  checkAuth(),
+  AdminController.deleteCategory,
+);
+adminRouter.put(
+  '/admin/category',
+  AdminValidator.updateCategory,
+  checkAuth(),
+  AdminController.updateCategory,
+);
+adminRouter.get(
+  '/category',
+  AdminValidator.getCategories,
+  AdminController.getCategories,
+);
 adminRouter.post(
   '/admin/photo',
   AdminValidator.uploadPhotos,
   checkAuth(),
   AdminController.uploadPhotos,
+);
+adminRouter.delete(
+  '/admin/:albumId/photo',
+  AdminValidator.deletePhotos,
+  checkAuth(),
+  AdminController.deletePhotos,
 );
 
 export default adminRouter;

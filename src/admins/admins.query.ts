@@ -108,8 +108,15 @@ export default class Queries {
   static async getPhotosByAlbumId(albumId) {
     return getRepository(Photo)
       .createQueryBuilder('photo')
-      .select(['photo.url'])
+      .select(['photo.url', 'photo.id'])
       .where('photo.album = :albumId', { albumId })
+      .getMany();
+  }
+
+  static async getAllCategories() {
+    return getRepository(Category)
+      .createQueryBuilder('category')
+      .select(['category.id', 'category.name'])
       .getMany();
   }
 

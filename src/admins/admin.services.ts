@@ -98,4 +98,43 @@ export default class Services {
       id: album.id,
     };
   }
+
+  static async deleteCategory(categoryId) {
+    const category = await Queries.getCategoryById(categoryId);
+    if (!category) throw new Error('Такого альбома не існує');
+    await category.remove();
+    return {
+      success: true,
+    };
+  }
+
+  static async updateCategory(categoryId, newName) {
+    const category = await Queries.getCategoryById(categoryId);
+    if (!category) throw new Error('Такого альбома не існує');
+    category.name = newName;
+    await category.save();
+    return {
+      success: true,
+    };
+  }
+
+  static async getCategories() {
+    const categories = await Queries.getAllCategories();
+    return {
+      categories,
+    };
+  }
+
+  static async deletePhotos(photosId, albumId) {
+    const photos = await Queries.getPhotosByAlbumId(albumId);
+    if (!photos) throw new Error('Такого альбома не існує');
+    await Promise.all(photos.map(async (photo) => {
+      if (photosId.find(el => el.id === photo.id)) {
+        await photo.remove();
+      }
+    }));
+    return {
+      success: true,
+    };
+  }
 }

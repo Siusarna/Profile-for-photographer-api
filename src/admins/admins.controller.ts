@@ -99,10 +99,52 @@ export class AdminController {
       return ctx.throw(e);
     }
   }
+
   static async getAlbumById(ctx: Context) {
     try {
       const { albumId } = ctx.request.params;
       ctx.body = await Services.getAlbumById(albumId);
+      return ctx;
+    } catch (e) {
+      return ctx.throw(e);
+    }
+  }
+
+  static async deleteCategory(ctx: Context) {
+    try {
+      const { categoryId } = ctx.request.params;
+      ctx.body = await Services.deleteCategory(categoryId);
+      return ctx;
+    } catch (e) {
+      return ctx.throw(e);
+    }
+  }
+
+  static async updateCategory(ctx: Context) {
+    try {
+      const { categoryId, name } = ctx.request.body;
+      ctx.body = await Services.updateCategory(categoryId, name);
+      return ctx;
+    } catch (e) {
+      return ctx.throw(e);
+    }
+  }
+
+  static async getCategories(ctx: Context) {
+    try {
+      ctx.body = await Services.getCategories();
+      return ctx;
+    } catch (e) {
+      return ctx.throw(e);
+    }
+  }
+
+  static async deletePhotos(ctx: Context) {
+    try {
+      console.log(ctx.request);
+      const { photos } = ctx.request.body;
+      const { albumId } = ctx.request.params;
+      ctx.body = await Services.deletePhotos(photos, albumId);
       return ctx;
     } catch (e) {
       return ctx.throw(e);
