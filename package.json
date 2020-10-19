@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsnd --respawn --no-notify --transpileOnly src/app.ts",
     "serve": "tsnd --respawn --no-notify --transpileOnly src/app.ts",
     "lint": "tslint --config tslint.json --format stylish --project tsconfig.json --fix",
     "build": "tsc",
