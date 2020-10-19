@@ -1,13 +1,17 @@
 FROM node:12.16.1
 
-WORKDIR /profile-site-api
+RUN mkdir -p /viflinzider-api
 
-COPY package.json ./
+WORKDIR /viflinzider-api
 
-RUN npm install
+COPY package*.json /viflinzider-api/
 
-COPY . .
+RUN npm i
+
+COPY . /viflinzider-api
+
+RUN npm run build
 
 EXPOSE 3000
 
-CMD ["npm","start"]
+CMD ["npm", "start"]
