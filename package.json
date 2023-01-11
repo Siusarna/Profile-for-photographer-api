@@ -17,7 +17,7 @@
     "@koa/cors": "^3.1.0",
     "aws-sdk": "^2.709.0",
     "bcrypt": "^5.0.0",
-    "class-validator": "^0.12.2",
+    "class-validator": "^0.14.0",
     "config": "^3.3.1",
     "jimp": "^0.14.0",
     "jsonwebtoken": "^8.5.1",
